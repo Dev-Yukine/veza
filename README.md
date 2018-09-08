@@ -40,7 +40,7 @@ working micro **Veza** applications.
 const { Node } = require('veza');
 
 const node = new Node('hello')
-	.on('client.connect', (client) => console.log(`[IPC] Client Connected: ${client.name}`))
+	.on('client.identify', (client) => console.log(`[IPC] Client Connected: ${client.name}`))
 	.on('client.disconnect', (client) => console.log(`[IPC] Client Disconnected: ${client.name}`))
 	.on('client.destroy', (client) => console.log(`[IPC] Client Destroyed: ${client.name}`))
 	.on('server.ready', (server) => console.log(`[IPC] Client Ready: Named ${server.name}`))
@@ -48,8 +48,10 @@ const node = new Node('hello')
 		console.log(`Received data:`, message.data);
 		message.reply(message.data);
 	})
-	.on('error', (error, client) => console.error(`[IPC] Error from ${client.name}`, error))
-	.serve(8001);
+	.on('error', (error, client) => console.error(`[IPC] Error from ${client.name}`, error));
+
+node.serve(8001)
+	.catch((error) => console.error('[IPC] Disconnected!', error));
 ```
 
 `world.js`
